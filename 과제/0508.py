@@ -2,13 +2,16 @@ import streamlit as st
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
+import os
 
-# 1.
-# 데이터 로드 (경로가 맞다는 가정 하에)
-df_a = pd.read_json(r'C:\Users\KDT21\Desktop\김기석 강사님\과제\heart_failure_a.json')
-df_b = pd.read_json(r'C:\Users\KDT21\Desktop\김기석 강사님\과제\heart_failure_b.json')
-df = pd.merge(df_a, df_b, on='person_id', how='inner')
-
+# --- 데이터 로드 부분 수정 ---
+# 깃허브 서버 환경에서는 파일명만 적어야 파일을 찾을 수 있습니다.
+try:
+    df_a = pd.read_json('heart_failure_a.json')
+    df_b = pd.read_json('heart_failure_b.json')
+    df = pd.merge(df_a, df_b, on='person_id', how='inner')
+except FileNotFoundError:
+    st.error("데이터 파일을 찾을 수 없습니다. GitHub에 json 파일이 있는지 확인해주세요.")
 st.title('박출계수 / 나이')
 # st.write('이 플롯은 박출계수와 나이의 관계를 사망 여부(DEATH_EVENT)별로 색상을 구분하여 보여줍니다.')
 
