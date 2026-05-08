@@ -4,14 +4,15 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import os
 
-# --- 데이터 로드 부분 수정 ---
-# 깃허브 서버 환경에서는 파일명만 적어야 파일을 찾을 수 있습니다.
-try:
-    df_a = pd.read_json('heart_failure_a.json')
-    df_b = pd.read_json('heart_failure_b.json')
-    df = pd.merge(df_a, df_b, on='person_id', how='inner')
-except FileNotFoundError:
-    st.error("데이터 파일을 찾을 수 없습니다. GitHub에 json 파일이 있는지 확인해주세요.")
+# 현재 실행 중인 파일의 폴더 경로를 자동으로 가져옵니다.
+base_path = os.path.dirname(os.path.abspath(__file__))
+
+# 파일 이름을 서버 경로와 결합하여 로드합니다.
+# (json 파일들도 깃허브의 같은 폴더 내에 있어야 합니다.)
+df_a = pd.read_json(os.path.join(base_path, 'heart_failure_a.json'))
+df_b = pd.read_json(os.path.join(base_path, 'heart_failure_b.json'))
+df = pd.merge(df_a, df_b, on='person_id', how='inner')
+
 st.title('박출계수 / 나이')
 # st.write('이 플롯은 박출계수와 나이의 관계를 사망 여부(DEATH_EVENT)별로 색상을 구분하여 보여줍니다.')
 
